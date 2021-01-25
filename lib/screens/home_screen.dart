@@ -20,6 +20,10 @@ class HomeScreen extends StatelessWidget {
             RaisedButton(
               onPressed: () => Navigator.pushNamed(context, '/getIt/crud-sample'),
               child: Text('GetIt Crud Sample')
+            ),
+            RaisedButton(
+                onPressed: () => Navigator.pushNamed(context, '/mobx/counter-sample'),
+                child: Text('Mobx Counter Sample')
             )
           ],
         ),
