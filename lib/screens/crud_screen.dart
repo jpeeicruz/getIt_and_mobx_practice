@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/model/Task.dart';
+import 'package:get_it/get_it.dart';
+import 'package:test_app/services/TaskService.dart';
+
+GetIt getIt = GetIt.instance;
 
 class CrudScreen extends StatefulWidget {
   @override
@@ -14,63 +18,96 @@ class _CrudScreenState extends State<CrudScreen>{
   int _listIndex = 0;
 
   @override
+  void initState() {
+    getIt
+      .isReady<TaskModel>()
+      .then((_) => getIt<TaskModel>().addListener(update));
+    update();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    getIt<TaskModel>().removeListener(update);
+    super.dispose();
+  }
+
+  void update () => setState(() {
+    _list = getIt<TaskModel>().tasks;
+    _task.text = '';
+  });
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Get It Crud Sample')
       ),
-      body: Container(
-        color: Colors.grey.shade200,
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: ListView(
-          children: [
-            _InputTask(),
-            ..._list?.map((task) {
-              int index = _list.indexOf(task);
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-                child: Card(
-                  child: ListTile(
-                    leading: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isEdit = true;
-                          _task.text = task.title;
-                          _listIndex = index;
-                        });
-                      },
-                      icon: Icon(Icons.fiber_new)
-                    ),
-                    trailing: !isEdit ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _list.removeAt(index);
-                        });
-                      },
-                      icon: Icon(Icons.delete),
-                    ) : null,
-                    title: Text(task.title.toString()),
-                  ),
-                ),
-              );
-            })?.toList() ?? [],
-          ],
-        )
+      body: FutureBuilder(
+        future: getIt.allReady(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            return Container(
+              color: Colors.grey.shade200,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              child: ListView(
+                children: [
+                  _InputTask(),
+                  ..._list?.map((task) {
+                    int index = _list.indexOf(task);
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 2, horizontal: 5),
+                      child: Card(
+                        child: ListTile(
+                          leading: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isEdit = true;
+                                  _task.text = task.title;
+                                  _listIndex = index;
+                                });
+                              },
+                              icon: Icon(Icons.fiber_new)
+                          ),
+                          trailing: !isEdit ? IconButton(
+                            onPressed: () {
+                              getIt<TaskModel>().deleteTask(index);
+                            },
+                            icon: Icon(Icons.delete),
+                          ) : null,
+                          title: Text(task.title.toString()),
+                        ),
+                      ),
+                    );
+                  })?.toList() ?? [],
+                ],
+              )
+            );
+          } else {
+            return Center(
+              child: Text('Waiting for initialization')
+            );
+          }
+        }
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if(!isEdit) {
             if(_formKey.currentState.validate()) {
-              setState(() {
-                _list.add(Task(title: _task.text));
-                _task.text = '';
-              });
+              getIt<TaskModel>().addTask(_task.text);
             }
           } else {
+            getIt<TaskModel>().updateTask(_task.text, _listIndex);
             setState(() {
               isEdit = false;
-              _list[_listIndex].title = _task.text;
               _listIndex = 0;
               _task.text = '';
             });

@@ -5,6 +5,7 @@ import 'package:test_app/screens/crud_screen.dart';
 import 'package:test_app/screens/home_screen.dart';
 import 'package:test_app/services/CounterService.dart';
 import 'package:test_app/services/LoginService.dart';
+import 'package:test_app/services/TaskService.dart';
 import 'package:test_app/services/UserService.dart';
 
 GetIt getIt = GetIt.instance;
@@ -12,6 +13,8 @@ GetIt getIt = GetIt.instance;
 void setupLocator() {
   getIt.registerSingleton(UserService());
   getIt.registerSingleton<CounterModel>(CounterImplementation(),
+      signalsReady: true);
+  getIt.registerSingleton<TaskModel>(TaskImpl(),
       signalsReady: true);
   getIt.registerFactory<LoginService>(() => LoginService());
 }
