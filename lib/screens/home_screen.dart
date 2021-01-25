@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
               child: Text('GetIt Counter Sample')
             ),
             RaisedButton(
-              // onPressed: () => Navigator.pushNamed(context, '/getIt/crud-sample'),
+              onPressed: () => Navigator.pushNamed(context, '/getIt/crud-sample'),
               child: Text('GetIt Crud Sample')
             )
           ],
