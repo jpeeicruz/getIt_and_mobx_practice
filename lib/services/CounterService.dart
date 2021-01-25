@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import 'package:test_app/main.dart';
@@ -26,6 +24,4 @@ class CounterImplementation extends CounterModel {
     _counter++;
     notifyListeners();
   }
-
 }
-

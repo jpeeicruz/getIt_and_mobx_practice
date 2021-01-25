@@ -9,10 +9,11 @@ class CounterScreen extends StatefulWidget {
   _CounterScreenState createState() => _CounterScreenState();
 }
 
-class _CounterScreenState extends State<CounterScreen>{
+class _CounterScreenState extends State<CounterScreen> {
   @override
   void initState() {
-    getIt.isReady<CounterModel>()
+    getIt
+        .isReady<CounterModel>()
         .then((_) => getIt<CounterModel>().addListener(update));
     super.initState();
   }
@@ -28,28 +29,25 @@ class _CounterScreenState extends State<CounterScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Text('GET IT')
-        ),
-        body: FutureBuilder(
-          future: getIt.allReady(),
-          builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              return Center(
-                  child: Text('${getIt<CounterModel>().counter}', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500))
-              );
-            } else {
-              return Center(
-                child: Text('Waiting for initializtion'),
-              );
-            }
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-            onPressed: getIt<CounterModel>().incrementCounter,
-            child: Icon(Icons.add)
-        ),
+      appBar: AppBar(title: Text('GET IT')),
+      body: FutureBuilder(
+        future: getIt.allReady(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Center(
+                child: Text('${getIt<CounterModel>().counter}',
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.w500)));
+          } else {
+            return Center(
+              child: Text('Waiting for initializtion'),
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: getIt<CounterModel>().incrementCounter,
+          child: Icon(Icons.add)),
     );
   }
 }
-

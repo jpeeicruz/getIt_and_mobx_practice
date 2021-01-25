@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:test_app/main.dart';
 import 'package:test_app/model/Task.dart';
 
@@ -42,4 +41,3 @@ class TaskImpl extends TaskModel {
   // TODO: implement tasks
   List<Task> get tasks => _tasks;
 }
-

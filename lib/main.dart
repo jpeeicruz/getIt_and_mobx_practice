@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:test_app/screens/counter_mobx_screen.dart';
 import 'package:test_app/screens/counter_screen.dart';
+import 'package:test_app/screens/crud_mobx_screen.dart';
 import 'package:test_app/screens/crud_screen.dart';
 import 'package:test_app/screens/home_screen.dart';
 import 'package:test_app/services/CounterService.dart';
@@ -41,6 +42,14 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (_) => CrudScreen());
           case '/mobx/counter-sample':
             return MaterialPageRoute(builder: (_) => CounterMobxScreen());
+          case '/mobx/crud-sample':
+            return MaterialPageRoute(builder: (_) => CrudMobxScreen());
+          default:
+            return MaterialPageRoute(builder: (_) => Scaffold(
+              body: Center(
+                child: Text('No defined Routes')
+              )
+            ));
         }
       },
     );
